@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Student Study Habit</title>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet"/>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --ink: #0f1923;
+    --ink-soft: #3b4a57;
+    --ink-muted: #7a8a97;
+    --accent: #2563c7;
+    --accent-light: #dbeafe;
+    --accent-dark: #1a47a0;
+    --gold: #e8a020;
+    --gold-light: #fef3d7;
+    --surface: #ffffff;
+    --bg: #f0f4fa;
+    --border: #d1dce8;
+    --success: #16a34a;
+    --danger: #dc2626;
+    --radius: 14px;
+    --radius-sm: 8px;
+  }
+
+  html, body {
+    height: 100%;
+    background: var(--bg);
+    font-family: 'Sora', sans-serif;
+    color: var(--ink);
+  }
+
+  body {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1.5rem;
+    background:
+      radial-gradient(ellipse 60% 50% at 15% 20%, #bfdbfe88 0%, transparent 70%),
+      radial-gradient(ellipse 50% 40% at 85% 75%, #fef9c388 0%, transparent 70%),
+      #e8eff8;
+  }
+
+  /* ── Page shell ── */
+  .page {
+    width: 100%;
+    max-width: 900px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    min-height: 560px;
+    border-radius: 22px;
+    overflow: hidden;
+    box-shadow: 0 24px 64px -12px rgba(15,25,35,0.18), 0 0 0 1px rgba(255,255,255,0.7);
+    animation: fadeUp 0.55s cubic-bezier(.22,.68,0,1.2) both;
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(28px) scale(0.97); }
+    to   { opacity: 1; transform: none; }
+  }
+
+  /* ── Left panel ── */
+  .panel-left {
+    background: linear-gradient(145deg, #1a3a6e 0%, #0f2348 55%, #0a1a38 100%);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 2.5rem 2.5rem 2rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .panel-left::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(circle 180px at 20% 80%, rgba(37,99,199,0.35) 0%, transparent 70%),
+      radial-gradient(circle 120px at 80% 15%, rgba(232,160,32,0.2) 0%, transparent 60%);
+    pointer-events: none;
+  }
+
+  /* decorative dots */
+  .dots-grid {
+    position: absolute;
+    top: 50px; right: 30px;
+    width: 90px; height: 90px;
+    background-image: radial-gradient(circle, rgba(255,255,255,0.15) 1.5px, transparent 1.5px);
+    background-size: 14px 14px;
+    opacity: 0.6;
+  }
+
+  /* Logo */
+  .logo {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .logo-icon {
+    width: 48px; height: 48px;
+    background: var(--gold);
+    border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    box-shadow: 0 4px 14px rgba(232,160,32,0.4);
+  }
+
+  .logo-icon svg { width: 26px; height: 26px; }
+
+  .logo-name {
+    font-family: 'DM Serif Display', serif;
+    font-size: 20px;
+    color: #fff;
+    line-height: 1.1;
+  }
+  .logo-name span { display: block; font-family: 'Sora', sans-serif; font-size: 10px; font-weight: 400; color: #93b4e0; letter-spacing: 0.08em; margin-top: 2px; }
+
+  /* Hero text */
+  .panel-hero {
+    position: relative;
+  }
+  .panel-hero h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 2.1rem;
+    color: #fff;
+    line-height: 1.2;
+    margin-bottom: 1rem;
+  }
+  .panel-hero h1 em { color: var(--gold); font-style: italic; }
+  .panel-hero p {
+    font-size: 13.5px;
+    color: #93b4e0;
+    line-height: 1.7;
+    max-width: 260px;
+  }
+
+  /* Stats row */
+  .stats {
+    position: relative;
+    display: flex;
+    gap: 1.5rem;
+  }
+  .stat { }
+  .stat-num {
+    font-size: 22px; font-weight: 700; color: #fff;
+  }
+  .stat-lbl { font-size: 11px; color: #93b4e0; margin-top: 2px; }
+
+  /* ── Right panel ── */
+  .panel-right {
+    background: var(--surface);
+    display: flex;
+    flex-direction: column;
+    padding: 2.5rem 2.5rem 2rem;
+  }
+
+  /* Tab switcher */
+  .tabs {
+    display: flex;
+    background: var(--bg);
+    border-radius: var(--radius-sm);
+    padding: 4px;
+    margin-bottom: 2rem;
+  }
+  .tab {
+    flex: 1; padding: 9px 0;
+    font-size: 13.5px; font-weight: 500;
+    text-align: center;
+    border: none; background: none;
+    border-radius: 6px;
+    cursor: pointer;
+    color: var(--ink-muted);
+    transition: all 0.2s;
+    font-family: 'Sora', sans-serif;
+  }
+  .tab.active {
+    background: var(--surface);
+    color: var(--accent);
+    box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+  }
+
+  /* Form */
+  .form-screen { display: none; animation: slideIn 0.25s ease both; }
+  .form-screen.active { display: block; }
+
+  @keyframes slideIn {
+    from { opacity: 0; transform: translateX(10px); }
+    to   { opacity: 1; transform: none; }
+  }
+
+  .form-title { font-family: 'DM Serif Display', serif; font-size: 1.5rem; color: var(--ink); margin-bottom: 4px; }
+  .form-sub { font-size: 12.5px; color: var(--ink-muted); margin-bottom: 1.5rem; }
+
+  .field { margin-bottom: 1rem; }
+  .field label { display: block; font-size: 12px; font-weight: 600; letter-spacing: 0.04em; color: var(--ink-soft); margin-bottom: 6px; text-transform: uppercase; }
+
+  .input-wrap { position: relative; }
+  .input-wrap svg.field-icon {
+    position: absolute; left: 12px; top: 50%; transform: translateY(-50%);
+    width: 16px; height: 16px; color: var(--ink-muted);
+    pointer-events: none;
+  }
+  input[type=text], input[type=email], input[type=password] {
+    width: 100%; height: 42px;
+    padding: 0 38px 0 38px;
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius-sm);
+    font-size: 13.5px; font-family: 'Sora', sans-serif;
+    color: var(--ink); background: #fafcff;
+    outline: none; transition: border 0.15s, box-shadow 0.15s;
+  }
+  input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(37,99,199,0.1); background: #fff; }
+  .field.has-error input { border-color: var(--danger); }
+  .err-msg { font-size: 11px; color: var(--danger); margin-top: 4px; display: none; }
+  .field.has-error .err-msg { display: block; }
+
+  .toggle-vis {
+    position: absolute; right: 10px; top: 50%; transform: translateY(-50%);
+    background: none; border: none; cursor: pointer; padding: 0; color: var(--ink-muted);
+  }
+  .toggle-vis:hover { color: var(--ink); }
+  .toggle-vis svg { width: 17px; height: 17px; display: block; }
+
+  .row-end { display: flex; justify-content: flex-end; margin-bottom: 1.25rem; }
+  .link { background: none; border: none; cursor: pointer; font-size: 12.5px; color: var(--accent); font-family: 'Sora', sans-serif; padding: 0; }
+  .link:hover { text-decoration: underline; }
+
+  .btn-primary {
+    width: 100%; height: 44px;
+    background: var(--accent); color: #fff;
+    border: none; border-radius: var(--radius-sm);
+    font-size: 14px; font-weight: 600; font-family: 'Sora', sans-serif;
+    cursor: pointer; letter-spacing: 0.02em;
+    transition: background 0.15s, transform 0.1s, box-shadow 0.15s;
+    box-shadow: 0 3px 12px rgba(37,99,199,0.3);
+    margin-bottom: 1.25rem;
+  }
+  .btn-primary:hover { background: var(--accent-dark); box-shadow: 0 5px 18px rgba(37,99,199,0.4); }
+  .btn-primary:active { transform: scale(0.98); }
+
+  .divider { display: flex; align-items: center; gap: 10px; margin-bottom: 1.25rem; }
+  .divider hr { flex: 1; border: none; border-top: 1px solid var(--border); }
+  .divider span { font-size: 11.5px; color: var(--ink-muted); white-space: nowrap; }
+
+  .btn-google {
+    width: 100%; height: 42px;
+    background: #fff; border: 1.5px solid var(--border);
+    border-radius: var(--radius-sm);
+    font-size: 13px; font-weight: 500; font-family: 'Sora', sans-serif;
+    cursor: pointer; color: var(--ink);
+    display: flex; align-items: center; justify-content: center; gap: 9px;
+    transition: background 0.15s, border-color 0.15s;
+  }
+  .btn-google:hover { background: #f5f7fa; border-color: #b0bec8; }
+  .btn-google img { width: 17px; height: 17px; }
+
+  /* Success toast */
+  .toast {
+    display: none; align-items: center; gap: 8px;
+    background: #dcfce7; border: 1px solid #86efac;
+    border-radius: var(--radius-sm); padding: 10px 14px;
+    font-size: 12.5px; color: #166534; margin-bottom: 1rem;
+  }
+  .toast.show { display: flex; animation: slideIn 0.2s ease; }
+  .toast svg { width: 16px; height: 16px; flex-shrink: 0; }
+
+  /* Forgot screen */
+  #screen-forgot { }
+
+  @media (max-width: 640px) {
+    .page { grid-template-columns: 1fr; }
+    .panel-left { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="page">
+
+  <!-- LEFT PANEL -->
+  <div class="panel-left">
+    <div class="dots-grid"></div>
+
+    <div class="logo">
+      <div class="logo-icon">
+        <!-- book + pencil SVG logo -->
+        <svg viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="3" y="3" width="14" height="18" rx="2" fill="#fff" opacity="0.9"/>
+          <rect x="5" y="7" width="8" height="1.5" rx="0.75" fill="#1a3a6e"/>
+          <rect x="5" y="10.5" width="6" height="1.5" rx="0.75" fill="#1a3a6e"/>
+          <rect x="5" y="14" width="7" height="1.5" rx="0.75" fill="#1a3a6e"/>
+          <path d="M18 6l4 4-5 7-4.5 1 1-4.5L18 6z" fill="#e8a020" stroke="#fff" stroke-width="0.5"/>
+          <path d="M19.5 7.5l2.5 2.5" stroke="#fff" stroke-width="0.8"/>
+        </svg>
+      </div>
+      <div class="logo-name">
+        Student Study Habit
+        <span>Track · Analyze · Improve</span>
+      </div>
+    </div>
+
+    <div class="panel-hero">
+      <h1>Build <em>smarter</em><br>study habits,<br>every day.</h1>
+      <p>Track your sessions, identify patterns, and unlock insights that turn effort into excellence.</p>
+    </div>
+
+    <div class="stats">
+      <div class="stat">
+        <div class="stat-num">12k+</div>
+        <div class="stat-lbl">Students</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">94%</div>
+        <div class="stat-lbl">Grade lift</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">4.9★</div>
+        <div class="stat-lbl">Avg rating</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- RIGHT PANEL -->
+  <div class="panel-right">
+
+    <!-- Tabs -->
+    <div class="tabs" role="tablist">
+      <button class="tab active" id="tab-signin" role="tab" onclick="switchTab('signin')">Sign In</button>
+      <button class="tab" id="tab-signup" role="tab" onclick="switchTab('signup')">Sign Up</button>
+    </div>
+
+    <!-- Sign In -->
+    <div class="form-screen active" id="screen-signin">
+      <div class="form-title">Welcome back</div>
+      <div class="form-sub">Sign in to continue your study journey</div>
+
+      <div class="toast" id="toast-signin">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>
+        Signed in successfully!
+      </div>
+
+      <div class="field" id="f-si-email">
+        <label>Email address</label>
+        <div class="input-wrap">
+          <svg class="field-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M2 7l10 7 10-7"/></svg>
+          <input type="email" id="si-email" placeholder="you@university.edu"/>
+        </div>
+        <div class="err-msg">Enter a valid email address.</div>
+      </div>
+
+      <div class="field" id="f-si-pass">
+        <label>Password</label>
+        <div class="input-wrap">
+          <svg class="field-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+          <input type="password" id="si-pass" placeholder="••••••••"/>
+          <button class="toggle-vis" onclick="togglePwd('si-pass', this)" aria-label="Toggle">
+            <svg id="eye-si" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+          </button>
+        </div>
+        <div class="err-msg">Password is required.</div>
+      </div>
+
+      <div class="row-end">
+        <button class="link" onclick="switchTab('forgot')">Forgot password?</button>
+      </div>
+
+      <button class="btn-primary" onclick="doSignin()">Sign In →</button>
+
+      <div class="divider"><hr><span>or continue with</span><hr></div>
+
+      <button class="btn-google" onclick="doGoogle()">
+        <img src="https://www.svgrepo.com/show/475656/google-color.svg" alt="Google"/>
+        Continue with Google
+      </button>
+    </div>
+
+    <!-- Sign Up -->
+    <div class="form-screen" id="screen-signup">
+      <div class="form-title">Create account</div>
+      <div class="form-sub">Join thousands of students improving their habits</div>
+
+      <div class="toast" id="toast-signup">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>
+        Account created! Welcome aboard.
+      </div>
+
+      <div class="field" id="f-su-name">
+        <label>Full name</label>
+        <div class="input-wrap">
+          <svg class="field-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="7" r="4"/><path d="M5.5 21a8.38 8.38 0 0113 0"/></svg>
+          <input type="text" id="su-name" placeholder="Your full name"/>
+        </div>
+        <div class="err-msg">Name is required.</div>
+      </div>
+
+      <div class="field" id="f-su-email">
+        <label>Email address</label>
+        <div class="input-wrap">
+          <svg class="field-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M2 7l10 7 10-7"/></svg>
+          <input type="email" id="su-email" placeholder="you@university.edu"/>
+        </div>
+        <div class="err-msg">Enter a valid email address.</div>
+      </div>
+
+      <div class="field" id="f-su-pass">
+        <label>Password</label>
+        <div class="input-wrap">
+          <svg class="field-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+          <input type="password" id="su-pass" placeholder="Min. 8 characters"/>
+          <button class="toggle-vis" onclick="togglePwd('su-pass', this)" aria-label="Toggle">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+          </button>
+        </div>
+        <div class="err-msg">Password must be at least 8 characters.</div>
+      </div>
+
+      <button class="btn-primary" style="margin-top:0.5rem" onclick="doSignup()">Create Account →</button>
+
+      <div class="divider"><hr><span>or continue with</span><hr></div>
+
+      <button class="btn-google" onclick="doGoogle()">
+        <img src="https://www.svgrepo.com/show/475656/google-color.svg" alt="Google"/>
+        Continue with Google
+      </button>
+    </div>
+
+    <!-- Forgot Password -->
+    <div class="form-screen" id="screen-forgot">
+      <button class="link" style="margin-bottom:1.25rem; display:flex; align-items:center; gap:5px; font-size:13px;" onclick="switchTab('signin')">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5"/><path d="M12 5l-7 7 7 7"/></svg>
+        Back to sign in
+      </button>
+      <div class="form-title">Reset password</div>
+      <div class="form-sub">We'll send a reset link to your email</div>
+
+      <div class="toast" id="toast-reset">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>
+        Reset link sent! Check your inbox.
+      </div>
+
+      <div class="field" id="f-re-email">
+        <label>Email address</label>
+        <div class="input-wrap">
+          <svg class="field-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M2 7l10 7 10-7"/></svg>
+          <input type="email" id="re-email" placeholder="you@university.edu"/>
+        </div>
+        <div class="err-msg">Enter a valid email address.</div>
+      </div>
+
+      <button class="btn-primary" onclick="doReset()">Send Reset Link →</button>
+    </div>
+
+  </div><!-- /panel-right -->
+</div>
+
+<script>
+function switchTab(id) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.form-screen').forEach(s => s.classList.remove('active'));
+  if (id === 'signin' || id === 'signup') {
+    document.getElementById('tab-' + id).classList.add('active');
+  }
+  document.getElementById('screen-' + id).classList.add('active');
+}
+
+function togglePwd(id, btn) {
+  const inp = document.getElementById(id);
+  const svg = btn.querySelector('svg');
+  if (inp.type === 'password') {
+    inp.type = 'text';
+    svg.innerHTML = '<path d="M17.94 17.94A10.07 10.07 0 0112 20c-7 0-11-8-11-8a18.45 18.45 0 015.06-5.94"/><path d="M9.9 4.24A9.12 9.12 0 0112 4c7 0 11 8 11 8a18.5 18.5 0 01-2.16 3.19"/><line x1="1" y1="1" x2="23" y2="23" stroke="currentColor" stroke-width="2"/>';
+  } else {
+    inp.type = 'password';
+    svg.innerHTML = '<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>';
+  }
+}
+
+function validEmail(v) { return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v); }
+
+function setErr(fid, hasErr) {
+  document.getElementById(fid).classList.toggle('has-error', hasErr);
+  return hasErr;
+}
+
+function showToast(id) {
+  const t = document.getElementById(id);
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3000);
+}
+
+function doSignin() {
+  const email = document.getElementById('si-email').value.trim();
+  const pass  = document.getElementById('si-pass').value;
+  let err = false;
+  err = setErr('f-si-email', !validEmail(email)) || err;
+  err = setErr('f-si-pass', !pass) || err;
+  if (!err) {
+    showToast('toast-signin');
+    localStorage.setItem('studyHabitUser', email);
+    setTimeout(() => { window.location.href = 'dashboard.html'; }, 900);
+  }
+}
+
+function doSignup() {
+  const name  = document.getElementById('su-name').value.trim();
+  const email = document.getElementById('su-email').value.trim();
+  const pass  = document.getElementById('su-pass').value;
+  let err = false;
+  err = setErr('f-su-name', !name) || err;
+  err = setErr('f-su-email', !validEmail(email)) || err;
+  err = setErr('f-su-pass', pass.length < 8) || err;
+  if (!err) {
+    showToast('toast-signup');
+    localStorage.setItem('studyHabitUser', email);
+    setTimeout(() => { window.location.href = 'dashboard.html'; }, 900);
+  }
+}
+
+function doReset() {
+  const email = document.getElementById('re-email').value.trim();
+  if (!setErr('f-re-email', !validEmail(email))) showToast('toast-reset');
+}
+
+function doGoogle() {
+  alert('Google OAuth integration goes here.');
+}
+</script>
+</body>
+</html>

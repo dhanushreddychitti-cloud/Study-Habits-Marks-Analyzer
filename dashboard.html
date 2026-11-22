@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Student Study Habits Analyzer</title>
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial,Helvetica,sans-serif;
+}
+
+body{
+background:linear-gradient(135deg,#4f46e5,#2563eb);
+min-height:100vh;
+display:flex;
+justify-content:center;
+align-items:center;
+padding:30px;
+}
+
+.container{
+width:700px;
+background:#fff;
+padding:30px;
+border-radius:15px;
+box-shadow:0 15px 30px rgba(0,0,0,.2);
+}
+
+h1{
+text-align:center;
+margin-bottom:20px;
+color:#2563eb;
+}
+
+.input-group{
+margin-bottom:15px;
+}
+
+label{
+font-weight:bold;
+display:block;
+margin-bottom:5px;
+}
+
+input{
+width:100%;
+padding:12px;
+border:1px solid #ccc;
+border-radius:8px;
+font-size:16px;
+}
+
+button{
+width:100%;
+padding:14px;
+background:#2563eb;
+color:white;
+font-size:18px;
+border:none;
+border-radius:8px;
+cursor:pointer;
+margin-top:10px;
+}
+
+button:hover{
+background:#1d4ed8;
+}
+
+.result{
+margin-top:25px;
+padding:20px;
+background:#f4f7fb;
+border-radius:10px;
+}
+
+.result h2{
+text-align:center;
+margin-bottom:15px;
+color:#2563eb;
+}
+
+.progress{
+height:30px;
+background:#ddd;
+border-radius:50px;
+overflow:hidden;
+margin-top:15px;
+}
+
+.bar{
+height:100%;
+width:0%;
+background:linear-gradient(90deg,#00c853,#64dd17);
+text-align:center;
+color:white;
+line-height:30px;
+font-weight:bold;
+transition:.8s;
+}
+
+.info{
+font-size:18px;
+margin:8px 0;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>Student Study Habits Analyzer</h1>
+<div style="text-align:right;margin-bottom:10px;">
+  <a href="index.html" style="color:#2563eb;text-decoration:none;font-size:14px;">&larr; Log out</a>
+</div>
+
+<div class="input-group">
+<label>Student Name</label>
+<input type="text" id="name">
+</div>
+
+<div class="input-group">
+<label>Roll Number</label>
+<input type="text" id="roll">
+</div>
+
+<div class="input-group">
+<label>Study Hours / Day</label>
+<input type="number" id="study">
+</div>
+
+<div class="input-group">
+<label>Sleep Hours</label>
+<input type="number" id="sleep">
+</div>
+
+<div class="input-group">
+<label>Attendance (%)</label>
+<input type="number" id="attendance">
+</div>
+
+<div class="input-group">
+<label>Internal Test 1 (100)</label>
+<input type="number" id="test1">
+</div>
+
+<div class="input-group">
+<label>Internal Test 2 (100)</label>
+<input type="number" id="test2">
+</div>
+
+<div class="input-group">
+<label>Internal Test 3 (100)</label>
+<input type="number" id="test3">
+</div>
+
+<div class="input-group">
+<label>Assignment 1 (100)</label>
+<input type="number" id="assignment1">
+</div>
+
+<div class="input-group">
+<label>Assignment 2 (100)</label>
+<input type="number" id="assignment2">
+</div>
+
+<div class="input-group">
+<label>Assignment 3 (100)</label>
+<input type="number" id="assignment3">
+</div>
+
+<button onclick="predict()">Predict Final Marks</button>
+
+<div class="result">
+
+<h2>Prediction Result</h2>
+
+<div class="info" id="student"></div>
+<div class="info" id="marks"></div>
+<div class="info" id="grade"></div>
+<div class="info" id="performance"></div>
+
+<div class="progress">
+<div class="bar" id="bar">0%</div>
+</div>
+
+</div>
+
+</div>
+
+<script>
+
+function predict(){
+
+let name=document.getElementById("name").value;
+let roll=document.getElementById("roll").value;
+
+let study=parseFloat(document.getElementById("study").value);
+let sleep=parseFloat(document.getElementById("sleep").value);
+let attendance=parseFloat(document.getElementById("attendance").value);
+
+let test1=parseFloat(document.getElementById("test1").value);
+let test2=parseFloat(document.getElementById("test2").value);
+let test3=parseFloat(document.getElementById("test3").value);
+
+let assignment1=parseFloat(document.getElementById("assignment1").value);
+let assignment2=parseFloat(document.getElementById("assignment2").value);
+let assignment3=parseFloat(document.getElementById("assignment3").value);
+
+if(
+name==""||
+roll==""||
+isNaN(study)||
+isNaN(sleep)||
+isNaN(attendance)||
+isNaN(test1)||
+isNaN(test2)||
+isNaN(test3)||
+isNaN(assignment1)||
+isNaN(assignment2)||
+isNaN(assignment3)
+){
+
+alert("Please fill all fields.");
+return;
+
+}
+
+// Average Scores
+let avgTest=(test1+test2+test3)/3;
+let avgAssignment=(assignment1+assignment2+assignment3)/3;
+
+// Prediction Formula
+let marks=
+(study*4)+
+(sleep*2)+
+(attendance*0.2)+
+(avgTest*0.4)+
+(avgAssignment*0.3);
+
+if(marks>100)
+marks=100;
+
+let grade="";
+let performance="";
+
+if(marks>=90){
+grade="A+";
+performance="Outstanding";
+}
+else if(marks>=80){
+grade="A";
+performance="Excellent";
+}
+else if(marks>=70){
+grade="B";
+performance="Very Good";
+}
+else if(marks>=60){
+grade="C";
+performance="Good";
+}
+else{
+grade="Fail";
+performance="Needs Improvement";
+}
+
+document.getElementById("student").innerHTML="<b>Student:</b> "+name+" ("+roll+")";
+
+document.getElementById("marks").innerHTML="<b>Predicted Final Marks:</b> "+marks.toFixed(2)+"%";
+
+document.getElementById("grade").innerHTML="<b>Grade:</b> "+grade;
+
+document.getElementById("performance").innerHTML="<b>Performance:</b> "+performance;
+
+document.getElementById("bar").style.width=marks+"%";
+document.getElementById("bar").innerHTML=marks.toFixed(0)+"%";
+
+}
+
+</script>
+
+</body>
+</html>
