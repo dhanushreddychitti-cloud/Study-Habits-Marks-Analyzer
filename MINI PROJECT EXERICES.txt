@@ -1,0 +1,80 @@
+MINI PROJECT EXERICES
+
+1. Put your files in XAMPP
+
+Go to:
+
+C:\xampp\htdocs\student-analyzer\
+
+Put your files there:
+
+student-analyzer
+│
+├── index.html
+├── dashboard.html
+├── loop.py
+└── Dhanush.java
+
+Do not rename student-analyzer.
+
+2. Start XAMPP
+
+Open:
+
+XAMPP Control Panel
+
+Find Apache.
+
+Click:
+
+Apache → Start
+
+You should see Apache running.
+
+You do not need to start MySQL for the HTML login/dashboard connection.
+
+3. Open Command Prompt
+
+Press:
+
+Windows + R
+
+Type:
+
+cmd
+
+Press Enter.
+
+4. Go to your project folder
+
+In Command Prompt, type:
+
+cd C:\xampp\htdocs\student-analyzer
+
+Press Enter.
+
+You should now be inside:
+
+C:\xampp\htdocs\student-analyzer>
+
+Check your files:
+
+dir
+
+You should see:
+
+index.html
+dashboard.html
+loop.py
+Dhanush.java
+5. Run the Login Page through XAMPP
+
+Now don't double-click index.html.
+
+Instead, open Chrome/Edge and type:
+
+http://localhost/student-analyzer/index.html
+
+Press Enter.
+
+Your login page will open through XAMPP Apache.
